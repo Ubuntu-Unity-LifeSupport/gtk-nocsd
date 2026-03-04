@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
+
+export NOOPT=1
+export PREFIX=/usr
+export LIBDIR=$(PREFIX)/lib/$(DEB_HOST_MULTIARCH)
+
+%:
+	dh $@
+
+execute_after_dh_auto_install:
+	rm -rf debian/*/usr/share/licenses
+	rm -rf debian/*/usr/share/doc/gtk-nocsd
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..

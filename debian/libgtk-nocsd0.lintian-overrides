@@ -1,0 +1,2 @@
+link-to-shared-library-in-wrong-package usr/lib/*/libgtk-nocsd.so.0 [usr/lib/*/libgtk-nocsd.so]
+symbols-file-missing-build-depends-package-field libgtk-nocsd.so.0 [symbols]

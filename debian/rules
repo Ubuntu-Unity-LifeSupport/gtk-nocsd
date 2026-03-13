@@ -14,6 +14,12 @@ export LIBDIR=$(PREFIX)/lib/$(DEB_HOST_MULTIARCH)
 execute_after_dh_auto_install:
 	rm -rf debian/*/usr/share/licenses
 	rm -rf debian/*/usr/share/doc/gtk-nocsd
+	rm -rf debian/*/usr/lib/*/libgtk-nocsd.so
+
+# Setting the setuid bit allows the library to be used in
+# secure-execution mode, which avoids warnings when using sudo, etc.
+execute_after_dh_fixperms:
+	chmod 4644 debian/*/usr/lib/*/libgtk-nocsd.so.0
 
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..

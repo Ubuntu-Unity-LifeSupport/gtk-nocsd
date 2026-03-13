@@ -18,16 +18,21 @@ Section: libs
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
-Description: Library to disable GTK client side decorations (CSD)
+Conflicts:
+ gtk3-nocsd,
+ libgtk3-nocsd0,
+Description: Library to disable GTK client side decorations
  libgtk-nocsd is a small LD_PRELOADable library used to disable the
  client side decorations (CSD) of GTK3, GTK4, and libadwaita.
+ GTK's client side decorations and header bars cause apps to
+ display or work poorly with some window managers and desktops
+ other than GNOME.
  .
- Since GTK 3.10, its developers added a so-called header bar or custom
- title bar. With this and the client-side decoration, the original
- title bar and window border provided by the window manager are
- disabled by GTK. This makes all GTK programs look alike, but
- have different handling from other windows on non-GNOME desktops. Even
- worse, this may break some window manager or compositors.
+ This library disables the client side decorations and restores
+ server side decorations and window management. This library is disabled
+ from running in GNOME.
  .
- Unfortunately, there is no reliable way of turning off CSDs in GTK
- directly. This library makes this possible.
+ This package includes an environment variable snippet to automatically
+ load this library for all user processes. If that's not wanted, create an
+ empty file /etc/environment.d/50-gtk-nocsd.conf to disable for everyone
+ or ~/.config/environment.d/50-gtk-nocsd.conf to disable for a specific user.

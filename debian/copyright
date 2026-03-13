@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: https://github.com/PCMan/gtk3-nocsd
-Upstream-Name: gtk3-nocsd
+Source: https://codeberg.org/MorsMortium/GTK-NoCSD
+Upstream-Name: GTK-NoCSD
 
 Files: *
 Copyright: 2025-2026, MorsMortium
@@ -8,7 +8,6 @@ License: GPL-3+
 
 Files: debian/*
 Copyright: 2026 Jeremy Bícha <jbicha@ubuntu.com>
-           2015-2016 Christian Seiler <christian@iwakd.de>
 License: LGPL-2.1+
 
 License: GPL-3+

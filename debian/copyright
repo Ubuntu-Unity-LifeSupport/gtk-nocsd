@@ -10,6 +10,11 @@ Files: debian/*
 Copyright: 2026 Jeremy Bícha <jbicha@ubuntu.com>
 License: LGPL-2.1+
 
+Files: debian/*.lintian-overrides
+Copyright: 2026 Jeremy Bícha <jbicha@ubuntu.com>
+           2015-2016 Christian Seiler <christian@iwakd.de>
+License: LGPL-2.1+
+
 License: GPL-3+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

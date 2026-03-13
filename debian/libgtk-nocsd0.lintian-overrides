@@ -1,2 +1,16 @@
 # There is no -dev package
 symbols-file-missing-build-depends-package-field libgtk-nocsd.so.0 [symbols]
+# The library is installed setuid root (but not executable) to suppress
+# warnings from the dynamic linker when calling privileged programs
+# (ping falls under that category) when it is preloaded. (Since this
+# library is preloaded globally, this means that every invocation of
+# any privileged program would print a warning.) setuid causes the
+# dynamic linker to also preload it in that case, without the warning.
+# Since privileged programs aren't usually in need of this
+# functionality, ideally one should be able to tell ld.so(8) to just
+# suppress the warning but not load the library, but that's currently
+# not possible. This file mode has a precedent in the sdate package,
+# which also contains a library for use with LD_PRELOAD.
+elevated-privileges 4644 root/root [usr/lib/x86_64-linux-gnu/libgtk-nocsd.so.0]
+non-standard-setuid-executable-perm 4644 [usr/lib/x86_64-linux-gnu/libgtk-nocsd.so.0]
+odd-permissions-on-shared-library 4644 [usr/lib/x86_64-linux-gnu/libgtk-nocsd.so.0]

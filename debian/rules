@@ -16,8 +16,7 @@ execute_after_dh_auto_install:
 	rm -rf debian/*/usr/share/doc/gtk-nocsd
 	rm -rf debian/*/usr/lib/*/libgtk-nocsd.so
 
-# Setting the setuid bit allows the library to be used in
-# secure-execution mode, which avoids warnings when using sudo, etc.
+# See debian/libgtk-nocsd0.lintian-overrides
 execute_after_dh_fixperms:
 	chmod 4644 debian/*/usr/lib/*/libgtk-nocsd.so.0
 

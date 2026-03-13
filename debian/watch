@@ -1,5 +1,3 @@
-Version: 5
-Source: https://codeberg.org/MorsMortium/GTK-NoCSD.git
-Matching-Pattern: HEAD
-Mode: git
-Git-Pretty: 0~%cd
+version=4
+opts="mode=git,pretty=0~%cd" \
+https://codeberg.org/MorsMortium/GTK-NoCSD.git HEAD

@@ -8,6 +8,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDAboutClose@Base 0~20260302
  GTKNoCSDAction@Base 0~20260302
  GTKNoCSDAddToUndecorated@Base 0~20260302
+ GTKNoCSDAddTransient@Base 0~20260314+4199b8b
  GTKNoCSDAdwApplicatonWindow@Base 0~20260302
  GTKNoCSDAdwDialog@Base 0~20260302
  GTKNoCSDAdwDialogForWindow@Base 0~20260302
@@ -17,8 +18,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDArguments@Base 0~20260302
  GTKNoCSDBUSAction@Base 0~20260302
  GTKNoCSDBox_get_type@Base 0~20260302
- GTKNoCSDCasildaCheck@Base 0~20260302
- GTKNoCSDCasildaChecked@Base 0~20260302
+ GTKNoCSDChangeTransient@Base 0~20260314+4199b8b
  GTKNoCSDCheckGTK4Header@Base 0~20260302
  GTKNoCSDContainer@Base 0~20260302
  GTKNoCSDCrashHandlerExit@Base 0~20260302
@@ -74,9 +74,13 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDLabelChange@Base 0~20260302
  GTKNoCSDMagic@Base 0~20260302
  GTKNoCSDMain@Base 0~20260302
+ GTKNoCSDNewGTKVersion@Base 0~20260314+4199b8b
  GTKNoCSDOnCasilda@Base 0~20260302
+ GTKNoCSDOnLomiri@Base 0~20260314+4199b8b
  GTKNoCSDPipeToChild@Base 0~20260302
  GTKNoCSDPipeToParent@Base 0~20260302
+ GTKNoCSDPlatformCheck@Base 0~20260314+4199b8b
+ GTKNoCSDPlatformChecked@Base 0~20260314+4199b8b
  GTKNoCSDRecall@Base 0~20260302
  GTKNoCSDRegex@Base 0~20260302
  GTKNoCSDSEGVAction@Base 0~20260302
@@ -90,7 +94,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDWindowGetChild@Base 0~20260302
  GTKNoCSDWindowList@Base 0~20260302
  GTKNoCSDWindowSetChild@Base 0~20260302
- NewGTKVersion@Base 0~20260302
  adw_application_window_get_visible_dialog@Base 0~20260302
  adw_dialog_present@Base 0~20260302
  adw_header_bar_set_title_widget@Base 0~20260302

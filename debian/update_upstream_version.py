@@ -15,10 +15,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-# On Debian systems, the full text of the GNU Lesser General Public
-# License version 3 can be found in the file
-# `/usr/share/common-licenses/GPL-3'.
 
 # This script automates upgrading upstream tarball when using Git snapshot
 # for projects that uses GitHub, tailored to work in the way UBports CI
@@ -27,13 +23,10 @@
 # Customize values for each package here. Although, if you modify version
 # template, you might also need to take a look at the parsing regex below.
 
-PACKAGE_NAME = 'lineageos-apndb'
-GITHUB_UPSTREAM_PROJECT = 'LineageOS/android_vendor_apn'
+PACKAGE_NAME = 'gtk-nocsd'
+GITHUB_UPSTREAM_PROJECT = 'MorsMortium/GTK-NoCSD'
 GITHUB_UPSTREAM_BRANCH = 'main'
-# The upstream version prefix matched the git branch for the old repo.
-# The new repo doesn't have versioned branches but we can't remove the
-# version number without adding an epoch.
-DCH_UPSTREAM_VERSION_TEMPLATE = '23.2+{gitdate}+{githash}'
+DCH_UPSTREAM_VERSION_TEMPLATE = '0~{gitdate}+{githash}'
 DCH_DEBIAN_REVISION_TEMPLATE = '1'
 
 import argparse
@@ -65,8 +58,8 @@ dch_version = subprocess.run(
 dch_version = dch_version.strip()
 
 dch_match = re.match(
-    # 0.1.0   + 20201020                                        + 8883e9a              -0ubports20.04.1
-    r'[0-9.]+\+(?P<gitdate>[0-9]{8})(\.(?P<gitdaterev>[0-9]+))?\+(?P<githash>[0-9a-f]+)-.*',
+    # 0.1.0   ~ 20201020                                        + 8883e9a              -0ubports20.04.1
+    r'[0-9.]+\~(?P<gitdate>[0-9]{8})(\.(?P<gitdaterev>[0-9]+))?\+(?P<githash>[0-9a-f]+)-.*',
     dch_version
 )
 
@@ -88,19 +81,19 @@ else:
 
 # Retrieve current upstream version using GitHub's API.
 
-github_branch_url = 'https://api.github.com/repos/{}/branches/{}' \
+github_branch_url = 'https://codeberg.org/api/v1/repos/{}/branches/{}' \
     .format(GITHUB_UPSTREAM_PROJECT, GITHUB_UPSTREAM_BRANCH)
 
 github_branch_res = requests.get(github_branch_url)
 github_branch = github_branch_res.json()
 
-github_githashfull = github_branch['commit']['sha']
+github_githashfull = github_branch['commit']['id']
 github_githash = github_githashfull[0:7]
 if github_githash == dch_githash:
     print("Already packaging current version, do nothing.")
     quit(0)
 
-github_date = github_branch['commit']['commit']['committer']['date']
+github_date = github_branch['commit']['timestamp']
 github_gitdate = dateutil.parser.parse(github_date).strftime('%Y%m%d')
 
 if github_gitdate == dch_gitdate:
@@ -123,8 +116,8 @@ subprocess.run(
 )
 
 # Also update ubports.source_location
-github_codeload = 'https://api.github.com/repos/{}/tarball/{}' \
-    .format(GITHUB_UPSTREAM_PROJECT, github_githashfull)
+github_codeload = 'https://codeberg.org/api/v1/repos/{}/archive/{}' \
+    .format(GITHUB_UPSTREAM_PROJECT, github_githashfull + '.tar.gz')
 github_origtarname = '{}_{}.orig.tar.gz' \
     .format(PACKAGE_NAME, github_upstreamversion)
 

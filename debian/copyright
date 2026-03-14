@@ -18,6 +18,7 @@ License: LGPL-2.1+
 Files: debian/update_upstream_version.py
 Copyright: 2020, 2023, UBports Foundation
  Ratchanan Srirattanamet
+ 2026 Jeremy Bícha <jbicha@ubuntu.com>
 License: GPL-3+
 
 License: GPL-3+

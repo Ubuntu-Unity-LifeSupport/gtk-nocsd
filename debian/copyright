@@ -20,6 +20,8 @@ Copyright: 2020, 2023, UBports Foundation
  Ratchanan Srirattanamet
  2026 Jeremy Bícha <jbicha@ubuntu.com>
 License: GPL-3+
+Comment: Originally from
+ https://gitlab.com/ubports/development/core/packaging/lineageos-apndb
 
 License: GPL-3+
  This program is free software; you can redistribute it and/or modify

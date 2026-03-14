@@ -1,3 +1,11 @@
+gtk-nocsd (0~20260314+4199b8b-1) UNRELEASED; urgency=medium
+
+  * New upstream git snapshot
+  * Copy ubports tarball update script from lineageos-apndb
+  * Adapt the update script to this Codeberg project
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 14 Mar 2026 18:33:07 -0400
+
 gtk-nocsd (0~20260302-1) experimental; urgency=low
 
   * Initial release (Closes: #1130648)

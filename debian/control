@@ -21,6 +21,7 @@ Depends:
 Conflicts:
  gtk3-nocsd,
  libgtk3-nocsd0,
+Provides: gtk-nocsd (= ${binary:Version})
 Description: Library to disable GTK client side decorations
  libgtk-nocsd is a small LD_PRELOADable library used to disable the
  client side decorations (CSD) of GTK3, GTK4, and libadwaita.

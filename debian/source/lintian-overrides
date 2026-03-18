@@ -1,2 +1,0 @@
-# Debian UBports Team intentionally uses get-orig-source
-gtk-nocsd source: debian-rules-contains-unnecessary-get-orig-source-target [debian/rules]

@@ -1,8 +1,11 @@
-gtk-nocsd (0~20260317+e35c75c-1) UNRELEASED; urgency=medium
+gtk-nocsd (0~20260317+e35c75c-1) unstable; urgency=medium
 
   * New upstream git snapshot
+  * Add versioned Provides for gtk-nocsd
+  * Update get-orig-source rule (Mitigates: #1112388)
+  * Release to unstable
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 18 Mar 2026 10:02:01 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 18 Mar 2026 10:11:44 -0400
 
 gtk-nocsd (0~20260314+4199b8b-1) experimental; urgency=medium
 

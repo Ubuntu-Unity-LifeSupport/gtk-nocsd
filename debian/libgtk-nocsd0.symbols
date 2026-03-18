@@ -72,6 +72,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDIgnoreHDYError@Base 0~20260302
  GTKNoCSDLDLinux@Base 0~20260302
  GTKNoCSDLabelChange@Base 0~20260302
+ GTKNoCSDLibraryInPath@Base 0~20260317+e35c75c
  GTKNoCSDMagic@Base 0~20260302
  GTKNoCSDMain@Base 0~20260302
  GTKNoCSDNewGTKVersion@Base 0~20260314+4199b8b
@@ -84,6 +85,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDRecall@Base 0~20260302
  GTKNoCSDRegex@Base 0~20260302
  GTKNoCSDSEGVAction@Base 0~20260302
+ GTKNoCSDSaveArguments@Base 0~20260317+e35c75c
  GTKNoCSDSetGTK3Headers@Base 0~20260302
  GTKNoCSDSetGTK4Headers@Base 0~20260302
  GTKNoCSDSettings@Base 0~20260302
@@ -233,6 +235,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_widget_set_visible@Base 0~20260302
  o_gtk_widget_show_all@Base 0~20260302
  o_gtk_widget_unparent@Base 0~20260302
+ o_gtk_widget_unrealize@Base 0~20260317+e35c75c
  o_gtk_window_begin_move_drag@Base 0~20260302
  o_gtk_window_get_application@Base 0~20260302
  o_gtk_window_get_child@Base 0~20260302

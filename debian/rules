@@ -20,5 +20,34 @@ execute_after_dh_auto_install:
 execute_after_dh_fixperms:
 	chmod 4644 debian/*/usr/lib/*/libgtk-nocsd.so.0
 
-get-orig-source:
-	uscan --noconf --force-download --rename --download-current-version --destdir=..
+include /usr/share/dpkg/pkg-info.mk
+
+PKD   = $(word 1,$(abspath $(dir $(MAKEFILE_LIST))))
+PKG   = $(DEB_SOURCE)
+UVER  = $(shell echo $(DEB_VERSION) | cut -d "-" -f1)
+DTYPE =
+VER  ?= $(subst $(DTYPE),,$(UVER))
+
+UURL = https://codeberg.org/MorsMortium/GTK-NoCSD.git
+UREV = $(shell echo $(VER) | cut -d"+" -f2)
+
+## http://wiki.debian.org/onlyjob/get-orig-source
+.PHONY: get-orig-source
+get-orig-source: $(PKG)_$(VER)$(DTYPE).orig.tar.xz $(info I: $(PKG)_$(VER)$(DTYPE))
+	@
+
+$(PKG)_$(VER)$(DTYPE).orig.tar.xz: $(info I: GIT Revision=$(UREV))
+	$(if $(wildcard $(PKG)-$(VER)),$(error $(PKG)-$(VER) exist, aborting..))
+	@echo "# Downloading..."
+	git clone $(UURL) $(PKG)-$(VER) \
+	   || $(RM) -r $(PKG)-$(VER)
+	cd $(PKG)-$(VER) \
+	   && git checkout "$(UREV)" \
+	   && echo "# Setting times..." \
+	   && for F in $$(git ls-tree -r --name-only HEAD); do touch --no-dereference -d "$$(git log -1 --format="%ai" -- $$F)" "$$F"; done \
+	   && echo "# Cleaning-up..." \
+	   && rm -rf .git .git*
+	@echo "# Packing..."
+	find -L "$(PKG)-$(VER)" -xdev -type f -print | sort \
+	   | XZ_OPT="-6v" tar -caf "../$(PKG)_$(VER)$(DTYPE).orig.tar.xz" -T- --owner=root --group=root --mode=a+rX \
+	   && $(RM) -r "$(PKG)-$(VER)"

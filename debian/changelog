@@ -1,3 +1,9 @@
+gtk-nocsd (0~20260319+1485c3e-1) UNRELEASED; urgency=medium
+
+  * New upstream git snapshot
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 19 Mar 2026 10:49:12 -0400
+
 gtk-nocsd (0~20260317+e35c75c-1) unstable; urgency=medium
 
   * New upstream git snapshot

@@ -1,8 +1,9 @@
-gtk-nocsd (0~20260321+0b77e1b-1) UNRELEASED; urgency=medium
+gtk-nocsd (0~20260321+0b77e1b-1) unstable; urgency=medium
 
   * New upstream git snapshot
+  * Add transitional packages for gtk3-nocsd (Closes: #1130646)
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 21 Mar 2026 14:36:51 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 21 Mar 2026 15:06:35 -0400
 
 gtk-nocsd (0~20260319+1485c3e-1) unstable; urgency=medium
 

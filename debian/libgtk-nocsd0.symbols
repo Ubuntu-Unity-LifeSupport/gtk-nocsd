@@ -21,7 +21,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDChangeTransient@Base 0~20260314+4199b8b
  GTKNoCSDCheckGTK4Header@Base 0~20260302
  GTKNoCSDContainer@Base 0~20260302
- GTKNoCSDCrashHandlerExit@Base 0~20260302
  GTKNoCSDCrashPid@Base 0~20260302
  GTKNoCSDEmptySize@Base 0~20260302
  GTKNoCSDExit@Base 0~20260302
@@ -78,6 +77,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDNewGTKVersion@Base 0~20260314+4199b8b
  GTKNoCSDOnLomiri@Base 0~20260314+4199b8b
  GTKNoCSDPipeToChild@Base 0~20260302
+ GTKNoCSDPipeToChildEnd@Base 0~20260321+0b77e1b
  GTKNoCSDPipeToParent@Base 0~20260302
  GTKNoCSDRecall@Base 0~20260302
  GTKNoCSDRegex@Base 0~20260302
@@ -100,6 +100,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  g_module_symbol@Base 0~20260302
  g_object_new@Base 0~20260302
  g_signal_connect_object@Base 0~20260302
+ g_type_register_static@Base 0~20260321+0b77e1b
+ g_type_register_static_simple@Base 0~20260321+0b77e1b
  gdk_window_get_frame_extents@Base 0~20260302
  gtk_about_dialog_new@Base 0~20260302
  gtk_builder_add_from_file@Base 0~20260302
@@ -145,6 +147,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_adw_window_title_get_type@Base 0~20260302
  o_g_module_symbol@Base 0~20260302
  o_g_signal_connect_object@Base 0~20260302
+ o_g_type_register_static@Base 0~20260321+0b77e1b
+ o_g_type_register_static_simple@Base 0~20260321+0b77e1b
  o_gdk_display_get_default@Base 0~20260302
  o_gdk_event_get_button@Base 0~20260302
  o_gdk_event_get_event_type@Base 0~20260302

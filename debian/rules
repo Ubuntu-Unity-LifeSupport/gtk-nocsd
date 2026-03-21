@@ -20,6 +20,10 @@ execute_after_dh_auto_install:
 execute_after_dh_fixperms:
 	chmod 4644 debian/*/usr/lib/*/libgtk-nocsd.so.0
 
+# Tweak version for transitional gtk3-nocsd packages
+override_dh_gencontrol:
+	dh_gencontrol -- "-v3+$(DEB_VERSION)"
+
 include /usr/share/dpkg/pkg-info.mk
 
 PKD   = $(word 1,$(abspath $(dir $(MAKEFILE_LIST))))

@@ -1,1 +1,2 @@
 debian/50-gtk-nocsd.conf usr/lib/environment.d
+usr

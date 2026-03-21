@@ -18,9 +18,6 @@ Section: libs
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
-Conflicts:
- gtk3-nocsd,
- libgtk3-nocsd0,
 Provides: gtk-nocsd (= ${binary:Version})
 Description: Library to disable GTK client side decorations
  libgtk-nocsd is a small LD_PRELOADable library used to disable the
@@ -37,3 +34,19 @@ Description: Library to disable GTK client side decorations
  load this library for all user processes. If that's not wanted, create an
  empty file /etc/environment.d/50-gtk-nocsd.conf to disable for everyone
  or ~/.config/environment.d/50-gtk-nocsd.conf to disable for a specific user.
+
+Package: gtk3-nocsd
+Architecture: all
+Section: oldlibs
+Depends: gtk-nocsd,
+         ${misc:Depends}
+Description: Library to disable GTK client side decorations (transitional package)
+ This is a transitional package. It can safely be removed.
+
+Package: libgtk3-nocsd0
+Architecture: all
+Section: oldlibs
+Depends: gtk-nocsd,
+         ${misc:Depends}
+Description: Library to disable GTK client side decorations (transitional package)
+ This is a transitional package. It can safely be removed.

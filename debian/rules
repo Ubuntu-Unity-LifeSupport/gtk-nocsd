@@ -8,6 +8,10 @@ export NOOPT=1
 export PREFIX=/usr
 export LIBDIR=$(PREFIX)/lib/$(DEB_HOST_MULTIARCH)
 
+ifeq ($(DEB_HOST_ARCH_OS),hurd)
+DEB_CFLAGS_MAINT_APPEND = -DPATH_MAX=4096
+endif
+
 %:
 	dh $@
 

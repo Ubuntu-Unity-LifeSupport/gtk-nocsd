@@ -1,0 +1,77 @@
+From: MorsMortium <mors.mortium.8@protonmail.com>
+Date: Tue, 5 May 2026 19:45:49 +0200
+Subject: [PATCH] Try to get library name from gtk_check_version location
+
+Fixes Ardour YTK crash
+---
+ Source/GTK-NoCSD.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/Source/GTK-NoCSD.c b/Source/GTK-NoCSD.c
+index f309d5d..4b7bdf7 100644
+--- a/Source/GTK-NoCSD.c
++++ b/Source/GTK-NoCSD.c
+@@ -840,6 +840,10 @@ void GTKNoCSDGetReferences(bool GetTypes) {
+ 		LOAD_SYMBOL(Library, g_module_symbol);
+ 	}
+ 
++	// Default library name and possible library information
++	Dl_info Information;
++	const char *Name = RTLD_NEXT;
++
+ 	// Get used GTK version
+ 	*(void **) (&o_gtk_check_version) = o_dlsym(RTLD_NEXT, "gtk_check_version");
+ 	if (o_gtk_check_version != NULL) {
+@@ -850,6 +854,12 @@ void GTKNoCSDGetReferences(bool GetTypes) {
+ 		} else if (o_gtk_check_version(4, 0, 0) == NULL) {
+ 			GTKNoCSDNewGTKVersion = 4;
+ 		}
++
++		// Try to get library name from location of gtk_check_version
++		if (dladdr((void *) (uintptr_t) o_gtk_check_version,
++			&Information) != 0) {
++			Name = Information.dli_fname;
++		}
+ 	}
+ 
+ 	// If gtk_check_version is missing, check linked libraries
+@@ -857,14 +867,15 @@ void GTKNoCSDGetReferences(bool GetTypes) {
+ 		dl_iterate_phdr(GTKNoCSDGetLinkedLibraries, NULL);
+ 	}
+ 
+-	// Get name of used library
+-	const char *Name = RTLD_NEXT;
+-	if (GTKNoCSDNewGTKVersion == 2) {
+-		Name = "libgtk-x11-2.0.so.0";
+-	} else if (GTKNoCSDNewGTKVersion == 3) {
+-		Name = "libgtk-3.so.0";
+-	} else if (GTKNoCSDNewGTKVersion == 4) {
+-		Name = "libgtk-4.so.1";
++	// Get name of used library, if not found from location of gtk_check_version
++	if (Name == RTLD_NEXT) {
++		if (GTKNoCSDNewGTKVersion == 2) {
++			Name = "libgtk-x11-2.0.so.0";
++		} else if (GTKNoCSDNewGTKVersion == 3) {
++			Name = "libgtk-3.so.0";
++		} else if (GTKNoCSDNewGTKVersion == 4) {
++			Name = "libgtk-4.so.1";
++		}
+ 	}
+ 
+ 	// Save for new type getting if needed
+@@ -923,7 +934,6 @@ void GTKNoCSDGetReferences(bool GetTypes) {
+ 			LOAD_SYMBOL(Library, gdk_window_get_geometry);
+ 			LOAD_SYMBOL(Library, gdk_window_get_user_data);
+ 			LOAD_SYMBOL(Library, gdk_window_get_frame_extents);
+-			LOAD_SYMBOL(Library, gtk_container_propagate_draw);
+ 		}
+ 
+ 		if (GTKNoCSDGTKVersion == 3 || GTKNoCSDGTKVersion == 4) {
+@@ -1035,6 +1045,7 @@ void GTKNoCSDGetReferences(bool GetTypes) {
+ 			LOAD_SYMBOL(Library, gtk_container_forall);
+ 			LOAD_SYMBOL(Library, gtk_widget_set_no_show_all);
+ 			LOAD_SYMBOL(Library, gtk_widget_destroy);
++			LOAD_SYMBOL(Library, gtk_container_propagate_draw);
+ 
+ 			Library = GTKNoCSDGetLibrary("libhandy-1.so.0", false);
+ 			if (Library == NULL) {

@@ -1,9 +1,11 @@
-gtk-nocsd (4.0-1) UNRELEASED; urgency=medium
+gtk-nocsd (4.0-1) unstable; urgency=medium
 
   * New upstream release
   * Bump minimum libadwaita to 1.5
+  * Cherry-pick patch to fix crash using ardour
+  * Update Standards Version to 4.7.4
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 05 May 2026 19:57:21 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 05 May 2026 20:12:58 -0400
 
 gtk-nocsd (0~20260321+0b77e1b-1) unstable; urgency=medium
 

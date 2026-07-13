@@ -1,3 +1,9 @@
+gtk-nocsd (4.3-1) UNRELEASED; urgency=medium
+
+  * New upstream release
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 13 Jul 2026 19:31:50 +0200
+
 gtk-nocsd (4.0-1) unstable; urgency=medium
 
   * New upstream release

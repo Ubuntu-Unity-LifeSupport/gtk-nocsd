@@ -1,0 +1,67 @@
+From: MorsMortium <mors.mortium.8@protonmail.com>
+Date: Sun, 2 Aug 2026 00:50:55 +0200
+Subject: Disable in sbuild, fix restarting applications started
+ without path
+
+
+Origin: upstream, after 4.6
+---
+ Source/GTK-NoCSD.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/Source/GTK-NoCSD.c b/Source/GTK-NoCSD.c
+index 8892b58..c417242 100644
+--- a/Source/GTK-NoCSD.c
++++ b/Source/GTK-NoCSD.c
+@@ -22,9 +22,9 @@
+ #include <link.h>
+ #include <sys/stat.h>
+ 
+-// List of arguments and number of them is saved for GTK applications, in case
+-// of crash, to restart them without the library
+-char **GTKNoCSDArguments = NULL;
++// List of arguments, full binary and number of them is saved for GTK
++// applications, in case of crash, to restart them without the library
++char **GTKNoCSDArguments = NULL, *GTKNoCSDBinary = NULL;
+ size_t GTKNoCSDArgumentNumber = 0;
+ 
+ void GTKNoCSDSaveArguments(void) {
+@@ -77,6 +77,13 @@ void GTKNoCSDSaveArguments(void) {
+ 	}
+ 	GTKNoCSDArguments[Number] = NULL;
+ 	GTKNoCSDArgumentNumber = Number;
++
++	// Save binary with full path
++	Length = readlink("/proc/self/exe", Buffer, sizeof(Buffer) - 1);
++	if (0 < Length) {
++		Buffer[Length] = '\0';
++		GTKNoCSDBinary = strdup(Buffer);
++	}
+ }
+ 
+ // Copies for the crash handler to use, since it loses the originals
+@@ -392,7 +399,8 @@ void GTKNoCSDInitDLSym(bool Unload) {
+ 		}
+ 		if (GTKNoCSDArguments != NULL) {
+ 			GTKNoCSDUnsetLDPreload();
+-			execve(GTKNoCSDArguments[0], GTKNoCSDArguments, environ);
++			execve(GTKNoCSDBinary != NULL ? GTKNoCSDBinary :
++				GTKNoCSDArguments[0], GTKNoCSDArguments, environ);
+ 			_exit(0);
+ 		}
+ 	}
+@@ -453,10 +461,10 @@ static void GTKNoCSDInit(void) {
+ 
+ 	// Check if the library is loaded into the Cambalache internal app, Merengue
+ 	// This is a development environment and the library is not needed to run
+-	if (GTKNoCSDArguments != NULL) {
+-		char *Application = GTKNoCSDArguments[1];
+-		Disable = Disable || (Application != NULL && strstr(Application,
+-			"/merengue\0") != NULL);
++	// Or if loaded into sbuild, a Debian build tool, where it produces spam
++	if (GTKNoCSDArguments != NULL && GTKNoCSDArguments[1] != NULL && !Disable) {
++		Disable = strstr(GTKNoCSDArguments[1], "/merengue\0") != NULL;
++		Disable = Disable || strstr(GTKNoCSDArguments[1], "/sbuild\0") != NULL;
+ 	}
+ 
+ 	// For package level loading disable on everything GNOME except Flashback

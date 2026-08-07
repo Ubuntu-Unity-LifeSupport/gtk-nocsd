@@ -1,8 +1,9 @@
-gtk-nocsd (4.6-1) UNRELEASED; urgency=medium
+gtk-nocsd (4.6-1) unstable; urgency=high
 
   * New upstream release
+  * Cherry-pick patch to avoid making sbuild logs noisy
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 07 Aug 2026 19:42:38 +0200
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 07 Aug 2026 19:49:30 +0200
 
 gtk-nocsd (4.5-1) unstable; urgency=medium
 

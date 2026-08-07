@@ -19,6 +19,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDArgumentNumber@Base 0~20260302
  GTKNoCSDArguments@Base 0~20260302
  GTKNoCSDBUSAction@Base 0~20260302
+ GTKNoCSDBinary@Base 4.6
  GTKNoCSDBox_get_type@Base 0~20260302
  GTKNoCSDCSD@Base 4.3
  GTKNoCSDCSDPadding@Base 4.3
@@ -26,7 +27,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDCheckGTK4Header@Base 0~20260302
  GTKNoCSDContainer@Base 0~20260302
  GTKNoCSDCrashPid@Base 0~20260302
- GTKNoCSDDecorationLayout@Base 4.3
  GTKNoCSDEmptySize@Base 0~20260302
  GTKNoCSDExit@Base 0~20260302
  GTKNoCSDFPEAction@Base 0~20260302
@@ -58,12 +58,10 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDGetAdwSymbols@Base 4.3
  GTKNoCSDGetAdwTypes@Base 4.0
  GTKNoCSDGetDLSym@Base 4.0
- GTKNoCSDGetDecorationLayout@Base 4.3
  GTKNoCSDGetGTK3Headers@Base 0~20260302
  GTKNoCSDGetGTK4Headers@Base 0~20260302
  GTKNoCSDGetHdySymbols@Base 4.3
  GTKNoCSDGetHdyTypes@Base 4.0
- GTKNoCSDGetHeaderBar@Base 4.0
  GTKNoCSDGetLDAndLibC@Base 4.0
  GTKNoCSDGetLibrary@Base 0~20260302
  GTKNoCSDGetLinkedLibraries@Base 4.0
@@ -92,9 +90,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDHdyApplicatonWindow@Base 0~20260302
  GTKNoCSDHdyHeaderBar@Base 0~20260302
  GTKNoCSDHdyWindow@Base 0~20260302
- GTKNoCSDHeaderBar@Base 4.0
  GTKNoCSDHeaderBarParent@Base 4.0
- GTKNoCSDHeaderBarParentFinalize@Base 4.0
  GTKNoCSDHooked@Base 0~20260302
  GTKNoCSDHooker@Base 0~20260302
  GTKNoCSDILLAction@Base 0~20260302

@@ -12,7 +12,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDAdwApplicatonWindow@Base 0~20260302
  GTKNoCSDAdwDialog@Base 0~20260302
  GTKNoCSDAdwDialogForWindow@Base 0~20260302
- GTKNoCSDAdwDialogWindowList@Base 4.4
  GTKNoCSDAdwHeaderBar@Base 0~20260302
  GTKNoCSDAdwWindow@Base 0~20260302
  GTKNoCSDAdwWindowTitle@Base 4.3
@@ -44,6 +43,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDGTKApplicationWindow@Base 0~20260302
  GTKNoCSDGTKBox@Base 0~20260302
  GTKNoCSDGTKBuilder@Base 0~20260302
+ GTKNoCSDGTKButton@Base 4.7
  GTKNoCSDGTKFileChooserDialog@Base 4.3
  GTKNoCSDGTKFileChooserWidget@Base 4.3
  GTKNoCSDGTKGObject@Base 0~20260302
@@ -106,6 +106,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDMain@Base 0~20260302
  GTKNoCSDNewGTKName@Base 4.3
  GTKNoCSDNewGTKVersion@Base 0~20260314+4199b8b
+ GTKNoCSDNoCSS@Base 4.7
  GTKNoCSDOnLomiri@Base 0~20260314+4199b8b
  GTKNoCSDPipeToChild@Base 0~20260302
  GTKNoCSDPipeToChildEnd@Base 0~20260321+0b77e1b
@@ -143,7 +144,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  g_type_register_static_simple@Base 0~20260321+0b77e1b
  gdk_window_get_frame_extents@Base 0~20260302
  gtk_about_dialog_new@Base 0~20260302
- gtk_application_get_windows@Base 4.4
  gtk_builder_add_from_file@Base 0~20260302
  gtk_builder_add_from_resource@Base 0~20260302
  gtk_builder_add_from_string@Base 0~20260302
@@ -164,6 +164,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  gtk_widget_reparent@Base 0~20260302
  gtk_widget_set_visible@Base 0~20260302
  gtk_widget_show_all@Base 0~20260302
+ gtk_window_get_application@Base 4.7
  gtk_window_get_child@Base 0~20260302
  gtk_window_get_titlebar@Base 0~20260302
  gtk_window_present@Base 0~20260302
@@ -200,7 +201,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_get_current_dir@Base 4.3
  o_g_idle_add@Base 4.3
  o_g_intern_static_string@Base 4.3
- o_g_list_append@Base 4.4
  o_g_list_free@Base 4.3
  o_g_log@Base 4.3
  o_g_malloc0@Base 4.3
@@ -252,7 +252,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gdk_window_get_user_data@Base 0~20260302
  o_gdk_window_show_window_menu@Base 0~20260302
  o_gtk_about_dialog_new@Base 0~20260302
- o_gtk_application_get_windows@Base 4.4
  o_gtk_application_set_app_menu@Base 0~20260302
  o_gtk_application_window_get_help_overlay@Base 0~20260302
  o_gtk_application_window_get_type@Base 0~20260302
@@ -266,10 +265,10 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_builder_add_from_string@Base 0~20260302
  o_gtk_builder_get_type@Base 0~20260302
  o_gtk_builder_new@Base 0~20260302
+ o_gtk_button_get_type@Base 4.7
  o_gtk_check_version@Base 0~20260302
  o_gtk_container_add@Base 0~20260302
  o_gtk_container_check_resize@Base 0~20260302
- o_gtk_container_forall@Base 4.0
  o_gtk_container_get_children@Base 0~20260302
  o_gtk_container_get_type@Base 0~20260302
  o_gtk_container_propagate_draw@Base 4.0
@@ -296,7 +295,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_im_context_set_client_window@Base 4.4
  o_gtk_im_context_set_cursor_location@Base 4.4
  o_gtk_image_get_type@Base 0~20260302
- o_gtk_label_get_label@Base 0~20260302
  o_gtk_label_get_text@Base 0~20260302
  o_gtk_label_get_type@Base 0~20260302
  o_gtk_label_set_label@Base 0~20260302
@@ -312,7 +310,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_style_context_has_class@Base 0~20260302
  o_gtk_toggle_button_get_type@Base 0~20260302
  o_gtk_widget_allocate@Base 0~20260302
- o_gtk_widget_create_pango_layout@Base 4.3
  o_gtk_widget_destroy@Base 0~20260302
  o_gtk_widget_get_allocated_height@Base 0~20260302
  o_gtk_widget_get_ancestor@Base 0~20260302
@@ -358,7 +355,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_window_get_window_type@Base 0~20260302
  o_gtk_window_is_active@Base 4.4
  o_gtk_window_present@Base 0~20260302
- o_gtk_window_set_application@Base 4.3
  o_gtk_window_set_child@Base 0~20260302
  o_gtk_window_set_decorated@Base 0~20260302
  o_gtk_window_set_destroy_with_parent@Base 0~20260302
@@ -370,7 +366,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_window_set_transient_for@Base 0~20260302
  o_hdy_application_window_get_type@Base 0~20260302
  o_hdy_header_bar_get_custom_title@Base 0~20260302
- o_hdy_header_bar_get_title@Base 4.3
  o_hdy_header_bar_get_type@Base 0~20260302
  o_hdy_header_bar_set_custom_title@Base 0~20260302
  o_hdy_header_bar_set_decoration_layout@Base 0~20260302

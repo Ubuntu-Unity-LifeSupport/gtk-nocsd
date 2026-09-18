@@ -37,7 +37,6 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDGTK3FindWidget@Base 4.3
  GTKNoCSDGTK3HasVisible@Base 4.4
  GTKNoCSDGTK3SetEmptyTitle@Base 4.3
- GTKNoCSDGTK3SetForceInvisible@Base 4.0
  GTKNoCSDGTK4Content@Base 0~20260302
  GTKNoCSDGTK4FindWidget@Base 4.4
  GTKNoCSDGTKApplicationWindow@Base 0~20260302
@@ -107,6 +106,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDNewGTKName@Base 4.3
  GTKNoCSDNewGTKVersion@Base 0~20260314+4199b8b
  GTKNoCSDNoCSS@Base 4.7
+ GTKNoCSDNoGTK3@Base 4.8
+ GTKNoCSDNoGTK4@Base 4.8
  GTKNoCSDOnLomiri@Base 0~20260314+4199b8b
  GTKNoCSDPipeToChild@Base 0~20260302
  GTKNoCSDPipeToChildEnd@Base 0~20260321+0b77e1b
@@ -117,8 +118,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  GTKNoCSDResolvePointer@Base 4.0
  GTKNoCSDSEGVAction@Base 0~20260302
  GTKNoCSDSaveArguments@Base 0~20260317+e35c75c
- GTKNoCSDSetGTK3Headers@Base 0~20260302
- GTKNoCSDSetGTK4Headers@Base 0~20260302
+ GTKNoCSDSetForceInvisible@Base 4.8
+ GTKNoCSDSetHeaders@Base 4.8
  GTKNoCSDSetUpFileChooser@Base 4.3
  GTKNoCSDSetUpSearchButton@Base 4.3
  GTKNoCSDSettings@Base 0~20260302
@@ -135,6 +136,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  adw_dialog_close@Base 4.3
  adw_dialog_force_close@Base 4.3
  adw_dialog_present@Base 0~20260302
+ adw_header_bar_set_decoration_layout@Base 4.8
  adw_header_bar_set_title_widget@Base 0~20260302
  adw_window_get_visible_dialog@Base 0~20260302
  dlsym@Base 4.0
@@ -155,6 +157,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  gtk_file_chooser_get_extra_widget@Base 4.3
  gtk_file_chooser_set_extra_widget@Base 4.3
  gtk_header_bar_set_custom_title@Base 0~20260302
+ gtk_header_bar_set_decoration_layout@Base 4.8
  gtk_header_bar_set_title_widget@Base 0~20260302
  gtk_im_context_set_cursor_location@Base 4.4
  gtk_show_about_dialog@Base 0~20260302
@@ -172,6 +175,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  gtk_window_set_decorated@Base 0~20260302
  gtk_window_set_titlebar@Base 0~20260302
  hdy_header_bar_set_custom_title@Base 0~20260302
+ hdy_header_bar_set_decoration_layout@Base 4.8
  o_adw_application_window_get_type@Base 0~20260302
  o_adw_application_window_get_visible_dialog@Base 0~20260302
  o_adw_dialog_close@Base 4.3
@@ -205,6 +209,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_log@Base 4.3
  o_g_malloc0@Base 4.3
  o_g_malloc0_n@Base 4.3
+ o_g_match_info_fetch_pos@Base 4.8
+ o_g_match_info_free@Base 4.8
  o_g_module_symbol@Base 0~20260302
  o_g_object_add_weak_pointer@Base 4.3
  o_g_object_bind_property@Base 4.3
@@ -220,6 +226,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_once_init_enter@Base 4.3
  o_g_once_init_leave@Base 4.3
  o_g_propagate_error@Base 4.3
+ o_g_regex_match_full@Base 4.8
  o_g_regex_new@Base 4.3
  o_g_regex_replace@Base 4.3
  o_g_resources_lookup_data@Base 4.3
@@ -229,6 +236,10 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_signal_handler_find@Base 4.3
  o_g_signal_handlers_disconnect_matched@Base 4.3
  o_g_signal_lookup@Base 4.3
+ o_g_string_free@Base 4.8
+ o_g_string_insert@Base 4.8
+ o_g_string_new@Base 4.8
+ o_g_strstr_len@Base 4.8
  o_g_timeout_add@Base 4.3
  o_g_type_check_class_cast@Base 4.3
  o_g_type_check_instance_cast@Base 4.3
@@ -321,6 +332,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_widget_get_next_sibling@Base 0~20260302
  o_gtk_widget_get_parent@Base 0~20260302
  o_gtk_widget_get_preferred_width@Base 4.4
+ o_gtk_widget_get_realized@Base 4.8
  o_gtk_widget_get_style_context@Base 0~20260302
  o_gtk_widget_get_toplevel@Base 0~20260302
  o_gtk_widget_get_type@Base 0~20260302
@@ -328,6 +340,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_widget_get_width@Base 0~20260302
  o_gtk_widget_get_window@Base 0~20260302
  o_gtk_widget_insert_action_group@Base 0~20260302
+ o_gtk_widget_is_ancestor@Base 4.8
  o_gtk_widget_measure@Base 0~20260302
  o_gtk_widget_queue_resize@Base 0~20260302
  o_gtk_widget_reparent@Base 0~20260302

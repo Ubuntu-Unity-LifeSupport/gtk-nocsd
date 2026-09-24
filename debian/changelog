@@ -1,3 +1,12 @@
+gtk-nocsd (0~20260321+0b77e1b-1+unity1) resolute; urgency=medium
+
+  * Backport upstream d851645: initialise the arguments in the crash
+    handler's entry point. The handler segfaulted on every restart
+    attempt instead of restarting the crashed application, compiz
+    included.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Thu, 24 Sep 2026 13:05:54 +0000
+
 gtk-nocsd (0~20260321+0b77e1b-1) unstable; urgency=medium
 
   * New upstream git snapshot

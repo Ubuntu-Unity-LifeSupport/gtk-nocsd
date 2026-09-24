@@ -1,0 +1,44 @@
+From: Fredrik Foss-Indrehus <fredrik@ffoss.net>
+Date: Sat, 28 Mar 2026 20:28:30 +0100
+Subject: Initialise the arguments in the crash handler's entry point
+
+Started as an executable through ld.so, the library enters at
+GTKNoCSDMain and its constructor never runs - glibc 2.43 does not call
+the main object's constructors either, not only musl. GTKNoCSDArguments
+stayed NULL, and when the application crashed the handler dereferenced
+it: every restart attempt segfaulted in libgtk-nocsd.so.0 instead of
+restarting the application. On Ubuntu Unity 26.04 that happened to
+compiz, and to a plain GTK3 window killed with SIGSEGV.
+
+Backported from upstream: the argument initialisation and the NULL
+check. The part of the commit that strips LD_PRELOAD before starting
+the handler is left out; it is for musl and needs a helper that came
+with a later refactor.
+
+Origin: backport, https://codeberg.org/MorsMortium/GTK-NoCSD/commit/d8516454a589049f6d39ced41ab45249389262b2
+Applied-Upstream: 4.0
+Last-Update: 2026-09-24
+---
+--- a/Source/GTK-NoCSD.c
++++ b/Source/GTK-NoCSD.c
+@@ -142,6 +142,11 @@
+ void GTKNoCSDMain(void) {
+ 	// This runs when the library is started as an executable
+ 
++	// Musl does not run constructors for custom entry points
++	if (GTKNoCSDArguments == NULL) {
++		GTKNoCSDSaveArguments();
++	}
++
+ 	// Unset library for next start, in case of crash
+ 	setenv("LD_PRELOAD", "", 1);
+ 
+@@ -164,7 +169,7 @@
+ 	}
+ 
+ 	// Restart if needed, leave
+-	if (Restart) {
++	if (Restart && GTKNoCSDArguments != NULL && GTKNoCSDArgumentNumber > 0) {
+ 		printf("GTK-NoCSD: Crash detected, restarting without library.\n");
+ 		execve(GTKNoCSDArguments[2], GTKNoCSDArguments + 2, environ);
+ 	}

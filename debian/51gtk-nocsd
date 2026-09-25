@@ -1,0 +1,20 @@
+# This file is sourced by Xsession(5), not executed.
+#
+# gtk-nocsd sets LD_PRELOAD in /usr/lib/environment.d, which only the systemd
+# user manager reads. X sessions started from Xsession without it (Xfce,
+# MATE, LXQt, window managers) would not load gtk-nocsd, so export it here too.
+#
+# ssh-agent, started by 90x11-common_ssh-agent in front of the session, is
+# setgid, and the loader drops LD_PRELOAD from its environment and so from
+# the session's; pass it inside, as 70gtk3-nocsd-propagate-LD_PRELOAD did.
+
+if [ -r /usr/lib/environment.d/50-gtk-nocsd.conf ]; then
+  case ":${LD_PRELOAD-}:" in
+    *:libgtk-nocsd.so.0:*) ;;
+    *)
+      LD_PRELOAD="libgtk-nocsd.so.0${LD_PRELOAD:+:$LD_PRELOAD}"
+      export LD_PRELOAD
+      ;;
+  esac
+  STARTUP="env LD_PRELOAD=$LD_PRELOAD $STARTUP"
+fi

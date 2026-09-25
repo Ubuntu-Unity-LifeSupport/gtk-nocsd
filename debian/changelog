@@ -1,3 +1,14 @@
+gtk-nocsd (4.8-1+unity2) resolute; urgency=medium
+
+  * Add /etc/X11/Xsession.d/51gtk-nocsd: environment.d only reaches the
+    systemd user manager, so X sessions started from Xsession without it
+    (Xfce, MATE, LXQt, window managers) did not load gtk-nocsd after 4.8-1
+    removed the gtk3-nocsd Xsession scripts. It adds the library to
+    LD_PRELOAD unless it is there already, and passes it past a setgid
+    ssh-agent the way 70gtk3-nocsd-propagate-LD_PRELOAD did.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Fri, 25 Sep 2026 23:19:37 +0000
+
 gtk-nocsd (4.8-1+unity1) resolute; urgency=medium
 
   * Rebase on Debian 4.8-1 (the version in 26.10). Fixes Chromium-based

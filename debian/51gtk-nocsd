@@ -9,12 +9,20 @@
 # the session's; pass it inside, as 70gtk3-nocsd-propagate-LD_PRELOAD did.
 
 if [ -r /usr/lib/environment.d/50-gtk-nocsd.conf ]; then
+  # The session's LD_PRELOAD is exported to the systemd user manager later
+  # (95dbus_update-activation-env) and replaces the value it built from
+  # environment.d, with every other library listed there (unity-gtk4-menu).
+  # Start from that value, so the export keeps it.
+  if [ -z "${LD_PRELOAD-}" ] && command -v systemctl >/dev/null 2>&1; then
+    LD_PRELOAD=$(systemctl --user show-environment 2>/dev/null |
+      sed -n 's/^LD_PRELOAD=//p')
+  fi
   case ":${LD_PRELOAD-}:" in
     *:libgtk-nocsd.so.0:*) ;;
     *)
       LD_PRELOAD="libgtk-nocsd.so.0${LD_PRELOAD:+:$LD_PRELOAD}"
-      export LD_PRELOAD
       ;;
   esac
+  export LD_PRELOAD
   STARTUP="env LD_PRELOAD=$LD_PRELOAD $STARTUP"
 fi

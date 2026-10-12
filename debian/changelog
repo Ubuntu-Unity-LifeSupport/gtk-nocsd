@@ -1,3 +1,19 @@
+gtk-nocsd (4.8-1+unity4) resolute; urgency=medium
+
+  * Preload the library by path, /usr/$LIB/libgtk-nocsd.so.0, in
+    environment.d and in /etc/X11/Xsession.d/51gtk-nocsd. The library no
+    longer carries the setuid bit (mode 0644); the matching lintian
+    overrides are removed.
+  * debian/51gtk-nocsd: separate LD_PRELOAD entries with ':' only (spaces,
+    tabs and newlines in an inherited value broke the session start), write
+    the bare names of earlier releases as paths, read the systemd user
+    manager's value in the form systemctl prints it, and add nothing when
+    an environment.d/50-gtk-nocsd.conf of the administrator or the user
+    turns gtk-nocsd off. Tested at build time under dash and bash.
+  * Log out and back in after the upgrade.
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Mon, 12 Oct 2026 23:20:02 +0000
+
 gtk-nocsd (4.8-1+unity3) resolute; urgency=medium
 
   * debian/51gtk-nocsd: start from the systemd user manager's LD_PRELOAD when

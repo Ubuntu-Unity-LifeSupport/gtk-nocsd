@@ -1,4 +1,4 @@
-# This file is sourced by Xsession(5), not executed.
+# This file is sourced by Xsession(5) and by lightdm-session, not executed.
 #
 # gtk-nocsd sets LD_PRELOAD in /usr/lib/environment.d, which only the systemd
 # user manager reads. X sessions started from Xsession without it (Xfce,
@@ -7,22 +7,87 @@
 # ssh-agent, started by 90x11-common_ssh-agent in front of the session, is
 # setgid, and the loader drops LD_PRELOAD from its environment and so from
 # the session's; pass it inside, as 70gtk3-nocsd-propagate-LD_PRELOAD did.
+#
+# The library is preloaded by path, /usr/$LIB/libgtk-nocsd.so.0, with $LIB
+# left for the dynamic loader to expand (lib/x86_64-linux-gnu on amd64).
+# Programs that run with elevated privileges skip such an entry silently.
 
 if [ -r /usr/lib/environment.d/50-gtk-nocsd.conf ]; then
   # The session's LD_PRELOAD is exported to the systemd user manager later
   # (95dbus_update-activation-env) and replaces the value it built from
   # environment.d, with every other library listed there (unity-gtk4-menu).
-  # Start from that value, so the export keeps it.
+  # Start from that value, so the export keeps it. systemctl prints a value
+  # that contains "$" in the form $'...', with \\ and \' as the only
+  # escapes it uses for printable text; a value with any other escape is
+  # not used.
   if [ -z "${LD_PRELOAD-}" ] && command -v systemctl >/dev/null 2>&1; then
-    LD_PRELOAD=$(systemctl --user show-environment 2>/dev/null |
-      sed -n 's/^LD_PRELOAD=//p')
+    _nocsd_v=$(systemctl --user show-environment 2>/dev/null |
+      sed -n 's/^LD_PRELOAD=//p') || _nocsd_v=
+    case $_nocsd_v in
+      "\$'"*"'")
+        _nocsd_v=${_nocsd_v#??}
+        _nocsd_v=${_nocsd_v%?}
+        if printf '%s\n' "$_nocsd_v" | sed -e 's/\\\\//g' -e "s/\\\\'//g" |
+          grep -q '\\'; then
+          _nocsd_v=
+        else
+          _nocsd_v=$(printf '%s\n' "$_nocsd_v" |
+            sed -e 's/\\\\/\x01/g' -e "s/\\\\'/'/g" -e 's/\x01/\\/g')
+        fi
+        ;;
+      *\\*|*\'*|*\"*|\$*)
+        _nocsd_v=
+        ;;
+    esac
+    if [ -n "$_nocsd_v" ]; then
+      LD_PRELOAD=$_nocsd_v
+    fi
+    unset _nocsd_v
   fi
-  case ":${LD_PRELOAD-}:" in
-    *:libgtk-nocsd.so.0:*) ;;
-    *)
-      LD_PRELOAD="libgtk-nocsd.so.0${LD_PRELOAD:+:$LD_PRELOAD}"
-      ;;
-  esac
-  export LD_PRELOAD
-  STARTUP="env LD_PRELOAD=$LD_PRELOAD $STARTUP"
+
+  # One entry per ':' (the loader also splits on spaces; STARTUP below
+  # must not contain spaces or newlines), no empty entries, and the bare
+  # names of older releases written as paths. gtk-nocsd counts as present
+  # in any form.
+  _nocsd_new=
+  _nocsd_found=
+  _nocsd_rest=$(printf '%s\n' "${LD_PRELOAD-}" | tr ' \t\n' ':::')
+  while [ -n "$_nocsd_rest" ]; do
+    case $_nocsd_rest in
+      *:*) _nocsd_e=${_nocsd_rest%%:*}; _nocsd_rest=${_nocsd_rest#*:} ;;
+      *)   _nocsd_e=$_nocsd_rest; _nocsd_rest= ;;
+    esac
+    case $_nocsd_e in
+      '') continue ;;
+      libgtk-nocsd.so.0|libunity-gtk4-menu.so.0)
+        _nocsd_e='/usr/$LIB/'$_nocsd_e ;;
+    esac
+    case $_nocsd_e in
+      */libgtk-nocsd.so.0) _nocsd_found=1 ;;
+    esac
+    _nocsd_new=${_nocsd_new:+$_nocsd_new:}$_nocsd_e
+  done
+
+  # Turned off by the user or the administrator: an
+  # environment.d/50-gtk-nocsd.conf of their own, in any directory systemd
+  # reads before /usr/lib, shadows ours.
+  if [ -z "$_nocsd_found" ]; then
+    _nocsd_found=
+    for _nocsd_e in /etc /run /usr/local/lib \
+        "${XDG_CONFIG_HOME:-${HOME:-/nonexistent}/.config}"; do
+      if [ -e "$_nocsd_e/environment.d/50-gtk-nocsd.conf" ]; then
+        _nocsd_found=off
+      fi
+    done
+    if [ -z "$_nocsd_found" ]; then
+      _nocsd_new='/usr/$LIB/libgtk-nocsd.so.0'${_nocsd_new:+:$_nocsd_new}
+    fi
+  fi
+
+  if [ -n "$_nocsd_new" ]; then
+    LD_PRELOAD=$_nocsd_new
+    export LD_PRELOAD
+    STARTUP="env LD_PRELOAD=$LD_PRELOAD $STARTUP"
+  fi
+  unset _nocsd_new _nocsd_found _nocsd_rest _nocsd_e
 fi

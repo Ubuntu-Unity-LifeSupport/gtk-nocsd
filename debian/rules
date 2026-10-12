@@ -16,9 +16,15 @@ execute_after_dh_auto_install:
 	rm -rf debian/*/usr/share/doc/gtk-nocsd
 	rm -rf debian/*/usr/lib/*/libgtk-nocsd.so
 
-# See debian/libgtk-nocsd0.lintian-overrides
-execute_after_dh_fixperms:
-	chmod 4644 debian/*/usr/lib/*/libgtk-nocsd.so.0
+# The Xsession.d script, under dash and bash, with and without set -eu.
+execute_after_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	for sh in dash bash; do \
+	  for mode in plain strict; do \
+	    sh debian/test-51gtk-nocsd.sh debian/51gtk-nocsd $$sh $$mode || exit 1; \
+	  done; \
+	done
+endif
 
 get-orig-source:
 	uscan --noconf --force-download --rename --download-current-version --destdir=..

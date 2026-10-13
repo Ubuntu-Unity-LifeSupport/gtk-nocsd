@@ -17,6 +17,8 @@ execute_after_dh_auto_install:
 	rm -rf debian/*/usr/lib/*/libgtk-nocsd.so
 
 # The Xsession.d script, under dash and bash, with and without set -eu.
+# A popped-out AdwDialog and its parent window, with the built library
+# preloaded under Xvfb.
 execute_after_dh_auto_test:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	for sh in dash bash; do \
@@ -24,6 +26,17 @@ ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	    sh debian/test-51gtk-nocsd.sh debian/51gtk-nocsd $$sh $$mode || exit 1; \
 	  done; \
 	done
+	mkdir -p debian/test-build
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o debian/test-build/test-dialog-parent \
+	  debian/tests-src/test-dialog-parent.c \
+	  $$(pkg-config --cflags --libs libadwaita-1) -ldl
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o debian/test-build/test-gtk3-dialog-parent \
+	  debian/tests-src/test-gtk3-dialog-parent.c \
+	  $$(pkg-config --cflags --libs gtk+-3.0) -ldl
+	xvfb-run -a -s "-screen 0 1280x1024x24" \
+	  sh debian/tests-src/run-dialog-parent.sh $(CURDIR)/libgtk-nocsd.so.0 \
+	  $(CURDIR)/debian/test-build/test-dialog-parent \
+	  $(CURDIR)/debian/test-build/test-gtk3-dialog-parent
 endif
 
 get-orig-source:

@@ -7,6 +7,10 @@ Section: x11
 Build-Depends:
  debhelper-compat (= 13),
  libadwaita-1-dev (>= 1.5),
+ libgtk-3-dev <!nocheck>,
+ pkgconf <!nocheck>,
+ xauth <!nocheck>,
+ xvfb <!nocheck>,
 Vcs-Browser: https://salsa.debian.org/ubports-team/gtk-nocsd
 Vcs-Git: https://salsa.debian.org/ubports-team/gtk-nocsd.git
 Homepage: https://codeberg.org/MorsMortium/GTK-NoCSD

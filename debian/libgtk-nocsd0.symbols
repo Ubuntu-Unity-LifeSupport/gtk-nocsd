@@ -180,10 +180,12 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_adw_application_window_get_visible_dialog@Base 0~20260302
  o_adw_dialog_close@Base 4.3
  o_adw_dialog_force_close@Base 4.3
+ o_adw_dialog_get_can_close@Base 4.8-1+unity5~
  o_adw_dialog_get_content_height@Base 0~20260302
  o_adw_dialog_get_content_width@Base 0~20260302
  o_adw_dialog_get_type@Base 0~20260302
  o_adw_dialog_present@Base 0~20260302
+ o_adw_dialog_set_can_close@Base 4.8-1+unity5~
  o_adw_dialog_set_content_height@Base 0~20260302
  o_adw_dialog_set_content_width@Base 0~20260302
  o_adw_header_bar_get_title_widget@Base 0~20260302
@@ -206,6 +208,8 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_idle_add@Base 4.3
  o_g_intern_static_string@Base 4.3
  o_g_list_free@Base 4.3
+ o_g_list_model_get_item@Base 4.8-1+unity5~
+ o_g_list_model_get_n_items@Base 4.8-1+unity5~
  o_g_log@Base 4.3
  o_g_malloc0@Base 4.3
  o_g_malloc0_n@Base 4.3
@@ -233,6 +237,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_g_return_if_fail_warning@Base 4.3
  o_g_signal_add_emission_hook@Base 4.3
  o_g_signal_connect_data@Base 4.3
+ o_g_signal_connect_object@Base 4.8-1+unity5~
  o_g_signal_handler_find@Base 4.3
  o_g_signal_handlers_disconnect_matched@Base 4.3
  o_g_signal_lookup@Base 4.3
@@ -362,6 +367,7 @@ libgtk-nocsd.so.0 libgtk-nocsd0 #MINVER#
  o_gtk_window_get_decorated@Base 0~20260302
  o_gtk_window_get_title@Base 0~20260302
  o_gtk_window_get_titlebar@Base 0~20260302
+ o_gtk_window_get_toplevels@Base 4.8-1+unity5~
  o_gtk_window_get_transient_for@Base 0~20260302
  o_gtk_window_get_type@Base 0~20260302
  o_gtk_window_get_type_hint@Base 0~20260302

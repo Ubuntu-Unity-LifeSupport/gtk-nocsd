@@ -1,3 +1,14 @@
+gtk-nocsd (4.8-1+unity6) resolute; urgency=medium
+
+  * d/p/0002: adw_dialog_force_close on a dialog that gtk-nocsd presented in
+    a window of its own now emits "closed", as for an embedded dialog,
+    and the dialog can be presented again. Epiphany force-closes its
+    preferences dialog when preferences are opened from another window and
+    aborted on a GLib-GObject critical afterwards.
+  * Build-time tests of the above (debian/tests-src).
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Sat, 17 Oct 2026 09:33:15 +0000
+
 gtk-nocsd (4.8-1+unity5) resolute; urgency=medium
 
   * d/p/0001: a popped-out AdwDialog is closed when its parent window is

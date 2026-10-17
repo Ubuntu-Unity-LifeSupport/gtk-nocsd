@@ -1,1 +1,2 @@
 0001-close-popped-out-dialogs-with-their-parent.patch
+0002-emit-closed-when-a-popped-out-dialog-is-force-closed.patch

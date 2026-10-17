@@ -1,0 +1,37 @@
+Description: Emit "closed" when a popped-out AdwDialog is force-closed
+ gtk-nocsd presents an AdwDialog in a window of its own. For a dialog in a
+ window of its own, libadwaita's adw_dialog_force_close only closes the
+ window: "closed" is not emitted and the dialog keeps its reference to the
+ closed window. An embedded dialog emits "closed" when it is force-closed.
+ .
+ Epiphany keeps its preferences dialog until "closed" and force-closes it
+ when preferences are opened from another window. It then still holds the
+ dialog, which went with its window, and aborts on a GLib-GObject critical
+ ("instance with invalid (NULL) class pointer").
+ .
+ In the adw_dialog_force_close hook, when the dialog is the content of its
+ own window, close it as when its parent window is destroyed: "closed" is
+ emitted once, even when can-close is FALSE, and can-close is restored
+ afterwards. Other dialogs are force-closed as before.
+Author: NeiroNext <mihail.rozshko@gmail.com>
+Forwarded: no
+Last-Update: 2026-10-17
+---
+--- a/Source/GTK-NoCSD.c
++++ b/Source/GTK-NoCSD.c
+@@ -3541,6 +3541,15 @@ void adw_dialog_force_close(AdwDialog *D
+ 	GtkWindow *Window = (GtkWindow *) o_gtk_widget_get_ancestor(
+ 		(GtkWidget *) Dialog, GTKNoCSDGTKWindow);
+ 
++	// A dialog popped out into its own window is closed instead, so that
++	// closed is emitted as for an embedded one
++	if (Window != NULL &&
++		GTKNoCSDGTK4Content(GTKNoCSDWindowGetChild(Window)) ==
++		(GtkWidget *) Dialog) {
++		GTKNoCSDCloseDialog(Dialog);
++		return;
++	}
++
+ 	// Try to close
+ 	o_adw_dialog_force_close(Dialog);
+ 

@@ -1,3 +1,16 @@
+gtk-nocsd (4.8-1+unity5) resolute; urgency=medium
+
+  * d/p/0001: a popped-out AdwDialog is closed when its parent window is
+    destroyed, as an embedded dialog goes with its window ("closed" is
+    emitted once). It used to stay a toplevel window and keep the parent
+    window and the application alive; Epiphany, quit with SIGTERM while its
+    "Set as Default Browser?" dialog was open, aborted on its check that
+    the shell is gone.
+  * Build-time test of the above under xvfb-run with the built library
+    preloaded (debian/tests-src).
+
+ -- Ubuntu Unity Life Support <mihail.rozshko@gmail.com>  Sat, 17 Oct 2026 03:15:26 +0000
+
 gtk-nocsd (4.8-1+unity4) resolute; urgency=medium
 
   * Preload the library by path, /usr/$LIB/libgtk-nocsd.so.0, in

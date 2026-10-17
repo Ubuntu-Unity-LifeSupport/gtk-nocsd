@@ -451,6 +451,286 @@ case_two_dialogs(void)
 		"second dialog and its window finalized");
 }
 
+/* Control: an AdwAlertDialog presented with adw_alert_dialog_choose stays
+ * embedded in its AdwApplicationWindow; force-closing it emits "closed"
+ * once and leaves the window, on which a dialog can be presented again */
+static gboolean
+is_embedded(gpointer data)
+{
+	struct presented *p = data;
+
+	return gtk_widget_get_root(GTK_WIDGET(p->dialog)) ==
+		(GtkRoot *) p->transient &&
+		gtk_widget_get_mapped(GTK_WIDGET(p->dialog));
+}
+
+static gboolean
+in_toplevels(GtkWindow *window)
+{
+	GListModel *toplevels = gtk_window_get_toplevels();
+	gboolean found = FALSE;
+
+	for (guint i = 0; i < g_list_model_get_n_items(toplevels); i++) {
+		GObject *toplevel = g_list_model_get_item(toplevels, i);
+
+		found = found || toplevel == (GObject *) window;
+		g_object_unref(toplevel);
+	}
+	return found;
+}
+
+static void
+embedded_chosen(GObject *dialog, GAsyncResult *result,
+	G_GNUC_UNUSED gpointer data)
+{
+	adw_alert_dialog_choose_finish(ADW_ALERT_DIALOG(dialog), result);
+}
+
+static void
+embedded_activate(GApplication *app, G_GNUC_UNUSED gpointer data)
+{
+	gpointer second, second_window;
+	int closed = 0;
+	GtkWidget *window = adw_application_window_new(GTK_APPLICATION(app));
+
+	adw_application_window_set_content(ADW_APPLICATION_WINDOW(window),
+		gtk_label_new("main window"));
+	gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+	gtk_window_present(GTK_WINDOW(window));
+	CHECK(spin_until(is_mapped, window, WAIT_MS), "main window mapped");
+
+	AdwDialog *alert = adw_alert_dialog_new("Question", "Body");
+	adw_alert_dialog_add_responses(ADW_ALERT_DIALOG(alert), "no", "No",
+		"yes", "Yes", NULL);
+	g_signal_connect(alert, "closed", G_CALLBACK(count), &closed);
+	adw_alert_dialog_choose(ADW_ALERT_DIALOG(alert), window, NULL,
+		embedded_chosen, NULL);
+	struct presented p = { alert, GTK_WINDOW(window) };
+	CHECK(spin_until(is_embedded, &p, WAIT_MS),
+		"dialog embedded in the main window");
+	spin(300);
+
+	adw_dialog_force_close(alert);
+	wait_count(&closed, 1);
+	CHECK(closed == 1, "\"closed\" emitted once (%d)", closed);
+	CHECK(in_toplevels(GTK_WINDOW(window)), "main window still a toplevel");
+
+	watch(new_dialog(), &second);
+	watch(present(second, window, GTK_WINDOW(window)), &second_window);
+	if (second != NULL)
+		CHECK(adw_dialog_close(second), "new dialog closes");
+	spin_until(is_null, &second_window, WAIT_MS);
+	CHECK(second_window == NULL, "new dialog window finalized");
+
+	gtk_window_destroy(GTK_WINDOW(window));
+	g_application_quit(app);
+}
+
+static void
+case_force_close_embedded(void)
+{
+	AdwApplication *app = adw_application_new(NULL, G_APPLICATION_NON_UNIQUE);
+
+	g_signal_connect(app, "activate", G_CALLBACK(embedded_activate), NULL);
+	guint timeout = g_timeout_add(4 * WAIT_MS, app_timeout, app);
+	g_application_run(G_APPLICATION(app), 0, NULL);
+	g_source_remove(timeout);
+	g_object_unref(app);
+}
+
+/* F1: the application keeps the dialog and force-closes it; the dialog
+ * window goes, "closed" is emitted once, and the dialog can be presented
+ * again on the same window */
+static void
+case_force_close_kept(void)
+{
+	gpointer parent, dialog, first_window, second_window = NULL;
+	int closed = 0;
+
+	watch(new_parent(), &parent);
+	AdwDialog *kept = g_object_ref_sink(new_dialog());
+	watch(kept, &dialog);
+	g_signal_connect(kept, "closed", G_CALLBACK(count), &closed);
+
+	watch(present(kept, parent, parent), &first_window);
+	adw_dialog_force_close(kept);
+	wait_count(&closed, 1);
+	spin_until(is_null, &first_window, WAIT_MS);
+	CHECK(first_window == NULL, "dialog window finalized");
+	CHECK(closed == 1, "\"closed\" emitted once (%d)", closed);
+
+	if (closed == 1) {
+		watch(present_again(kept, parent, parent), &second_window);
+		CHECK(second_window != NULL && gtk_widget_get_mapped(second_window),
+			"presented again in a new mapped window");
+		spin(300);
+		CHECK(closed == 1, "no \"closed\" on presenting again (%d)", closed);
+		adw_dialog_close(kept);
+		spin_until(is_null, &second_window, WAIT_MS);
+	}
+
+	gtk_window_destroy(parent);
+	spin(300);
+	g_object_unref(kept);
+	spin_until(is_null, &dialog, WAIT_MS);
+	CHECK(dialog == NULL, "dialog finalized after the application let it go");
+}
+
+/* F2: a single instance cleared from "closed", as epiphany does with its
+ * preferences dialog: force-closed when it is wanted on another window, then
+ * created again there */
+static AdwDialog *singleton;
+
+static void
+singleton_closed(G_GNUC_UNUSED AdwDialog *dialog, G_GNUC_UNUSED gpointer data)
+{
+	singleton = NULL;
+}
+
+static void
+case_force_close_singleton(void)
+{
+	gpointer first_parent, second_parent, first, first_window, second;
+
+	watch(new_parent(), &first_parent);
+	watch(new_parent(), &second_parent);
+	singleton = new_dialog();
+	g_signal_connect(singleton, "closed", G_CALLBACK(singleton_closed), NULL);
+	watch(singleton, &first);
+	watch(present(singleton, first_parent, first_parent), &first_window);
+
+	adw_dialog_force_close(singleton);
+	spin_until(is_null, &first_window, WAIT_MS);
+	spin(300);
+	CHECK(singleton == NULL, "single instance cleared by \"closed\"");
+	CHECK(first_window == NULL && first == NULL,
+		"first dialog and its window finalized");
+
+	if (singleton == NULL) {
+		singleton = new_dialog();
+		g_signal_connect(singleton, "closed", G_CALLBACK(singleton_closed),
+			NULL);
+		watch(singleton, &second);
+		present(singleton, second_parent, second_parent);
+		CHECK(adw_dialog_close(singleton), "new dialog closes");
+		spin_until(is_null, &second, WAIT_MS);
+		CHECK(singleton == NULL && second == NULL, "new dialog finalized");
+	}
+
+	gtk_window_destroy(first_parent);
+	gtk_window_destroy(second_parent);
+	spin(300);
+}
+
+/* F3: can-close FALSE; force-closing still closes the dialog and keeps the
+ * application's can-close setting */
+static void
+case_force_close_can_close(void)
+{
+	gpointer parent, dialog, window;
+	int closed = 0, attempts = 0;
+
+	watch(new_parent(), &parent);
+	AdwDialog *kept = g_object_ref_sink(new_dialog());
+	watch(kept, &dialog);
+	adw_dialog_set_can_close(kept, FALSE);
+	g_signal_connect(kept, "closed", G_CALLBACK(count), &closed);
+	g_signal_connect(kept, "close-attempt", G_CALLBACK(count), &attempts);
+
+	watch(present(kept, parent, parent), &window);
+	adw_dialog_force_close(kept);
+	wait_count(&closed, 1);
+	spin_until(is_null, &window, WAIT_MS);
+	CHECK(closed == 1, "\"closed\" emitted once (%d)", closed);
+	CHECK(attempts == 0, "no \"close-attempt\" (%d)", attempts);
+	CHECK(window == NULL, "dialog window finalized");
+	CHECK(!adw_dialog_get_can_close(kept), "can-close is FALSE again");
+
+	gtk_window_destroy(parent);
+	spin(300);
+	g_object_unref(kept);
+	spin_until(is_null, &dialog, WAIT_MS);
+	CHECK(dialog == NULL, "dialog finalized after the application let it go");
+}
+
+static void
+force_close_handler(AdwDialog *dialog, gpointer data)
+{
+	(*(int *) data)++;
+	adw_dialog_force_close(dialog);
+}
+
+/* F4: the application force-closes the dialog from its "close-attempt"
+ * handler */
+static void
+case_force_close_from_close_attempt(void)
+{
+	gpointer parent, dialog, window;
+	int closed = 0, attempts = 0;
+
+	watch(new_parent(), &parent);
+	watch(new_dialog(), &dialog);
+	adw_dialog_set_can_close(dialog, FALSE);
+	g_signal_connect(dialog, "closed", G_CALLBACK(count), &closed);
+	g_signal_connect(dialog, "close-attempt", G_CALLBACK(force_close_handler),
+		&attempts);
+	watch(present(dialog, parent, parent), &window);
+
+	adw_dialog_close(dialog);
+	wait_count(&closed, 1);
+	spin_until(is_null, &window, WAIT_MS);
+	spin_until(is_null, &dialog, WAIT_MS);
+	CHECK(attempts == 1, "one \"close-attempt\" (%d)", attempts);
+	CHECK(closed == 1, "\"closed\" emitted once (%d)", closed);
+	CHECK(window == NULL && dialog == NULL,
+		"dialog and its window finalized");
+	gtk_window_destroy(parent);
+	spin(300);
+}
+
+/* Control: force-closing a dialog that was never presented does nothing */
+static void
+case_force_close_unpresented(void)
+{
+	gpointer dialog;
+	int closed = 0;
+
+	AdwDialog *kept = g_object_ref_sink(new_dialog());
+	watch(kept, &dialog);
+	g_signal_connect(kept, "closed", G_CALLBACK(count), &closed);
+	adw_dialog_force_close(kept);
+	spin(300);
+	CHECK(closed == 0, "no \"closed\" (%d)", closed);
+	g_object_unref(kept);
+	spin_until(is_null, &dialog, WAIT_MS);
+	CHECK(dialog == NULL, "dialog finalized");
+}
+
+/* Control: the application force-closes the dialog from its "closed"
+ * handler after closing it */
+static void
+case_force_close_from_closed(void)
+{
+	gpointer parent, dialog, window;
+	int closed = 0;
+
+	watch(new_parent(), &parent);
+	watch(new_dialog(), &dialog);
+	g_signal_connect(dialog, "closed", G_CALLBACK(force_close_handler),
+		&closed);
+	watch(present(dialog, parent, parent), &window);
+
+	CHECK(adw_dialog_close(dialog), "adw_dialog_close succeeded");
+	wait_count(&closed, 1);
+	spin_until(is_null, &window, WAIT_MS);
+	spin_until(is_null, &dialog, WAIT_MS);
+	CHECK(closed == 1, "\"closed\" emitted once (%d)", closed);
+	CHECK(window == NULL && dialog == NULL,
+		"dialog and its window finalized");
+	gtk_window_destroy(parent);
+	spin(300);
+}
+
 static const struct {
 	const char *name;
 	void (*run)(void);
@@ -463,6 +743,13 @@ static const struct {
 	{ "control-represent-after-close", case_represent_after_close },
 	{ "control-hide-on-close-parent", case_hide_on_close },
 	{ "T6-two-dialogs", case_two_dialogs },
+	{ "F1-force-close-kept-dialog", case_force_close_kept },
+	{ "F2-force-close-single-instance", case_force_close_singleton },
+	{ "F3-force-close-can-close-false", case_force_close_can_close },
+	{ "F4-force-close-from-close-attempt",
+		case_force_close_from_close_attempt },
+	{ "control-force-close-unpresented", case_force_close_unpresented },
+	{ "control-force-close-from-closed", case_force_close_from_closed },
 };
 
 int
@@ -498,6 +785,9 @@ main(int argc, char **argv)
 		found = TRUE;
 	} else if (strcmp(argv[1], "T1b-app-close") == 0) {
 		case_app(1);
+		found = TRUE;
+	} else if (strcmp(argv[1], "control-force-close-embedded") == 0) {
+		case_force_close_embedded();
 		found = TRUE;
 	} else {
 		adw_init();

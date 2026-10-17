@@ -39,8 +39,14 @@ run() {
 for case in T1-app-destroy T1b-app-close T2-plain-window T3-nested-dialog \
 	T4-represent-kept-dialog T5-can-close-false control-closed-first \
 	control-represent-after-close control-hide-on-close-parent \
-	T6-two-dialogs; do
+	T6-two-dialogs F1-force-close-kept-dialog; do
 	run "$case" "$gtk4_test" "$case"
+done
+# Criticals abort these cases
+for case in F2-force-close-single-instance F3-force-close-can-close-false \
+	F4-force-close-from-close-attempt control-force-close-unpresented \
+	control-force-close-from-closed control-force-close-embedded; do
+	run "$case" env G_DEBUG=fatal-criticals "$gtk4_test" "$case"
 done
 run control-gtk3 "$gtk3_test"
 
